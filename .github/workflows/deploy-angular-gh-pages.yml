@@ -1,6 +1,5 @@
 name: Deploy Angular to GitHub Pages
 
-# Trigger the workflow on push or pull requests to the main branch
 on:
   push:
     branches:
@@ -32,9 +31,16 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Step 5: Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # Step 5: Set up SSH agent and use SSH private key from secrets
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/test
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use the SSH private key secret
+
+      # Step 6: Deploy to GitHub Pages using SSH
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git remote set-url origin git@github.com:<username>/<repo>.git
+          npx angular-cli-ghpages --dir=dist/your-project-name
