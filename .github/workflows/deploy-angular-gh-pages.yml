@@ -43,4 +43,4 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git remote set-url origin git@github.com:<username>/<repo>.git
-          npx angular-cli-ghpages --dir=dist/your-project-name
+          npx angular-cli-ghpages --dir=dist/test
